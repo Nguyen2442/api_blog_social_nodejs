@@ -51,7 +51,7 @@ export const verifyTokenAndUserAuthorization = (req, res, next) => {
     })
 }
 
-export const verifyTokenAndAdmin = (req, res, next) => {
+export const verifyTokenAndAdminAuthorization = (req, res, next) => {
     verifyToken(req, res, () => {
         if (req.user.isAdmin) {
             next();
