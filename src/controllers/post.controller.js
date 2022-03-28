@@ -122,12 +122,61 @@ export const searchPost = async (req, res) => {
 }
 
 //Like or Dislike a Post
-export const like = async (req, res) => {
+export const likePost = async (req, res) => {
     try {
-        const post = await Post.findById(req.params.id);
-        if (!post.likes.includes(req.body.author)) {
-            await post.update
+        const post = await Post.find({
+            _id: req.params.id,
+            likes: req.user.id,
+        });
+        if (post.length > 0) {
+            return res.status(400).json({
+                message: "You have already liked this post"
+            });
         }
+        
+        const like = await Post.findOneAndUpdate(
+            { _id: req.params.id },
+            {
+                $push: { likes: req.user.id },
+            },
+            { new: true }
+        );
+        if (!like) {
+            return res.status(404).json({
+                message: "Post not found"
+            });
+        }
+        res.status(200).json({message: "Post liked successfully"});
+    } catch (error) {
+        res.status(500).json(err)
+    }
+}
+
+export const unlikePost = async (req, res) => {
+    try {
+        const post = await Post.find({
+            _id: req.params.id,
+            likes: req.user.id,
+        });
+        if (post.length === 0) {
+            return res.status(400).json({
+                message: "You have not liked this post"
+            });
+        }
+        
+        const unlike = await Post.findOneAndUpdate(
+            { _id: req.params.id },
+            {
+                $pull: { likes: req.user.id },
+            },
+            { new: true }
+        );
+        if (!unlike) {
+            return res.status(404).json({
+                message: "Post not found"
+            });
+        }
+        res.status(200).json({message: "Post unliked successfully"});
     } catch (error) {
         res.status(500).json(err)
     }

@@ -1,5 +1,6 @@
 import Comment from "../models/comment.model.js";
 import Post from "../models/post.model.js";
+import mongoose from 'mongoose';
 
 // Get all comments
 export const getAllComments = async (req, res) => {
@@ -18,7 +19,7 @@ export const getCommentById = async (req, res) => {
     }
     try {
         const comment = await Comment.findById(req.params.id);
-        res.send(comment);
+        res.status(200).send(comment);
     } catch (error) {
         res.status(404).json(error);
     }
@@ -72,7 +73,8 @@ export const updateComment = async (req, res) => {
                 _id: req.params.id,
                 author: req.author._id
             },
-            { content }
+            { content },
+            { new: true }
         );
 
         res.status(200).json({ msg: "updated successfully." });
@@ -86,8 +88,9 @@ export const likeComment = async (req, res) => {
     try {
         const comment = await Comment.find({
             _id: req.params.id,
-            likes: req.author._id,
+            likes: req.user.id,
         });
+
         if (comment.length > 0) {
             return res
                 .status(400)
@@ -97,7 +100,7 @@ export const likeComment = async (req, res) => {
         await Comment.findOneAndUpdate(
             { _id: req.params.id },
             {
-                $push: { likes: req.author._id },
+                $push: { likes: req.user.id },
             },
             { new: true }
         );
@@ -113,7 +116,7 @@ export const unlikeComment = async (req, res) => {
     try {
         const comment = await Comment.find({
             _id: req.params.id,
-            likes: req.author._id,
+            likes: req.user.id,
         });
         if (comment.length === 0) {
             return res
@@ -124,7 +127,7 @@ export const unlikeComment = async (req, res) => {
         await Comment.findOneAndUpdate(
             { _id: req.params.id },
             {
-                $pull: { likes: req.author._id },
+                $pull: { likes: req.user.id },
             },
             { new: true }
         );
@@ -139,7 +142,7 @@ export const unlikeComment = async (req, res) => {
 export const deleteComment = async (req, res) => {
     try {
         const comment = await Comment.findOneAndDelete({
-            _id: req.params.id, user: req.author._id ,
+            _id: req.params.id, user: req.user.id ,
         });
 
         await Post.findOneAndUpdate({ _id: comment.postId }, {

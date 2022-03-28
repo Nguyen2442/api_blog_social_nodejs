@@ -8,7 +8,7 @@ export const verifyToken = (req, res, next) => {
             return res.status(403).json({
                 errors: [
                     {
-                        message: "Invalid Token",
+                        message: "You are not authorized",
                     }
                 ]
             })
@@ -35,8 +35,6 @@ export const verifyToken = (req, res, next) => {
 
 export const verifyTokenAndUserAuthorization = (req, res, next) => {
     verifyToken(req, res, () => {
-
-        console.log("req.user.id:",req.user.id)
         if(req.user.id === req.params.id || req.user.isAdmin) {
             next()
         } else {

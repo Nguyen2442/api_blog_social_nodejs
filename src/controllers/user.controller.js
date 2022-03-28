@@ -5,7 +5,7 @@ import User from '../models/user.model.js';
 export const getAllUser = async (req, res) => {
     try {
         const user = await User.find().select('-password')
-        res.send(user)
+        res.status(200).send(user)
     } catch (error) {
         res.status(404).json(error)
     }
@@ -13,11 +13,11 @@ export const getAllUser = async (req, res) => {
 
 export const getUserById = async (req, res) => {
     if (!mongoose.isValidObjectId(req.params.id)) {
-        res.status(400).send('Invalid Tag Id');
+        res.status(400).send('Invalid user Id');
     }
     try {
         const user = await User.findById(req.params.id).select('-password')
-        res.send(user)
+        res.status(200).send(user)
     } catch (error) {
         res.status(404).json(error)
     }

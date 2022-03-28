@@ -49,8 +49,8 @@ export const login = async (req, res) => {
         }
 
         if (user && validPass) {
-            const accessToken = createAccessToken({ user });
-            const refreshToken = createRefreshToken({ user });
+            const accessToken = createAccessToken({id: user._id, isAdmin: user.isAdmin});
+            const refreshToken = createRefreshToken({ id: user._id, isAdmin: user.isAdmin });
 
             refreshTokens.push(refreshToken);
             
@@ -94,8 +94,8 @@ export const refreshToken = async (req, res) => {
             refresh_token_secret
         );
         
-        const accessToken = createAccessToken({ user });
-        const refreshToken = createRefreshToken({user })
+        const accessToken = createAccessToken({ id: user._id, isAdmin: user.isAdmin });
+        const refreshToken = createRefreshToken({ id: user._id, isAdmin: user.isAdmin });
 
         refreshTokens.push(refreshToken);
         res.status(200).json({accessToken: accessToken, refreshToken: refreshToken})
