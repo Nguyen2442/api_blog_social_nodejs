@@ -36,6 +36,7 @@
     "@babel/core": "^7.17.5",
     "@babel/preset-env": "^7.16.11",
     "@babel/preset-modules": "^0.1.5",
+    "@types/jsonwebtoken": "^8.5.8",
     "eslint": "^8.10.0",
     "eslint-config-prettier": "^8.4.0",
     "eslint-config-xo": "^0.40.0",

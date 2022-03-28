@@ -3,8 +3,8 @@ import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken"
 
 export const register = async (req, res) => {
-    const user = await User.findOne({ email: req.body.email })
-    if (user) return res.status(400).json({
+    const emailExisted = await User.findOne({ email: req.body.email })
+    if (emailExisted) return res.status(400).json({
         success: false,
         message: "The email already exists!"
     })
@@ -18,7 +18,7 @@ export const register = async (req, res) => {
         password: bcrypt.hashSync(password, salt)
     });
     try {
-        const user = await NewUser.save({});
+        const user = await NewUser.save();
         res.status(201).json({
             success: true,
             message: 'The user is registered!',
@@ -49,23 +49,9 @@ export const login = async (req, res) => {
         }
 
         if (user && validPass) {
-            const accessToken = jwt.sign(
-                {
-                    id: user._id,
-                    isAdmin: user.isAdmin
-                },
-                secret,
-                { expiresIn: "1d" }
-            );
-            
-            const refreshToken = jwt.sign(
-                {
-                    id: user._id,
-                    isAdmin: user.isAdmin
-                },
-                secret,
-                { expiresIn: "7d" }
-            );
+            const accessToken = createAccessToken({ user });
+            const refreshToken = createRefreshToken({ user });
+
             refreshTokens.push(refreshToken);
             
             res.status(200).send({ user: user.email, accessToken: accessToken, refreshToken: refreshToken })
@@ -79,6 +65,7 @@ export const login = async (req, res) => {
 
 export const refreshToken = async (req, res) => {
     const refreshToken = req.header("x-auth-token");
+
         if (!refreshToken) {
             return res.status(401).json({
                 errors: [
@@ -106,18 +93,10 @@ export const refreshToken = async (req, res) => {
             refreshToken,
             refresh_token_secret
         );
-        const { email } = user;
-        const accessToken = jwt.sign(
-            { email },
-            secret,
-            { expiresIn: "1d" }
-        );
+        
+        const accessToken = createAccessToken({ user });
+        const refreshToken = createRefreshToken({user })
 
-        const refreshToken = jwt.sign(
-            { email },
-            secret,
-            { expiresIn: "7d" }
-        );
         refreshTokens.push(refreshToken);
         res.status(200).json({accessToken: accessToken, refreshToken: refreshToken})
     } catch (error) {
@@ -131,8 +110,51 @@ export const refreshToken = async (req, res) => {
     }
 }
 
-export const logout = async (req, res) => {
+export const logout = (req, res) => {
     const refreshToken = req.header("x-auth-token");
     refreshTokens = refreshTokens.filter((refToken) => refToken !== refreshToken); 
-    res.status(200);
+    return res.status(200);
+}
+
+export const changePassword = async (req, res) => {
+    try {
+        const user = await User.findById(req.user.id).select('+password');
+
+        if (!user) return res.status(404).json({
+            success: false,
+            message: "User not found"
+        })
+
+        const isOldPasswordMatching = await user.comparePassword(req.body.old_password);
+
+        if (!isOldPasswordMatching) {
+            return res.status(401).json({
+                success: false,
+                message: "Wrong old password"
+            })
+        }
+
+        user.password = req.body.new_password
+        await user.save();
+
+        return res.status(200).send({
+            success: true,
+            message: "Change password successfully"
+        });
+    } catch (error) {
+        res.status(500).send({
+            success: false,
+            message: error
+        });
+    }
+    
+
+}
+
+const createAccessToken = (user) => {
+    return jwt.sign(user , process.env.secret, { expiresIn: "1d" });
+}
+
+const createRefreshToken = (user) => {
+    return jwt.sign(user , process.env.secret, { expiresIn: "7d" });
 }

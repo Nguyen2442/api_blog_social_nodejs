@@ -11,8 +11,8 @@ import { postRoutes } from "./routes/post.route.js";
 import { tagRoutes } from "./routes/tag.route.js";
 import { categoryRoutes } from "./routes/category.route.js"
 import { commentRoutes } from "./routes/comment.route.js"
-import { authJwt } from "./utils/jwt.js";
-import { errorHandler } from "./utils/error-handler.js"
+//import { authJwt } from "./utils/jwt.js";
+//import { errorHandler } from "./utils/error-handler.js"
 import fileUpload from 'express-fileupload';
 import { uploadRoutes } from './routes/upload.js';
 
@@ -26,8 +26,11 @@ app.use(fileUpload({
 //middleware
 app.use(express.json());
 app.use(morgan("common"));
-app.use(authJwt());
-app.use(errorHandler);
+app.use(express.urlencoded({
+    extended: true
+}));
+//app.use(authJwt());
+//app.use(errorHandler);
 
 //Routes
 const api = process.env.API_URL;

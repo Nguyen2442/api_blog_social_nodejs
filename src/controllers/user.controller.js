@@ -4,7 +4,7 @@ import User from '../models/user.model.js';
 
 export const getAllUser = async (req, res) => {
     try {
-        const user = await User.find()
+        const user = await User.find().select('-password')
         res.send(user)
     } catch (error) {
         res.status(404).json(error)
@@ -16,7 +16,7 @@ export const getUserById = async (req, res) => {
         res.status(400).send('Invalid Tag Id');
     }
     try {
-        const user = await User.findById(req.params.id)
+        const user = await User.findById(req.params.id).select('-password')
         res.send(user)
     } catch (error) {
         res.status(404).json(error)
@@ -24,20 +24,20 @@ export const getUserById = async (req, res) => {
 }
 
 export const createUser = async (req, res) => {
+    const { username, email, password, bio, isAdmin, website, work, city, country, github_link, linkedin_link, facebook_link } = req.body;
     const newUser = new User({
-        username: req.body.username,
-        email: req.body.email,
-        password: req.body.password,
-        avatar: req.body.avatar,
-        bio: req.body.bio,
-        isAdmin: req.body.isAdmin,
-        website: req.body.website,
-        work: req.body.work,
-        city: req.body.city,
-        country: req.body.country,
-        github_link: req.body.github_link,
-        linkedin_link: req.body.linkedin_link,
-        facebook_link: req.body.facebook_link,
+        username,
+        email,
+        password,
+        bio,
+        isAdmin,
+        website,
+        work,
+        city,
+        country,
+        github_link,
+        linkedin_link,
+        facebook_link
     });
     try {
         const result = await newUser.save();

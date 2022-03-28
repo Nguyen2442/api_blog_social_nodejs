@@ -3,15 +3,16 @@ import {
     searchPost,
     getAllPost, getPostById, createPost, updatePost, deletePost
 } from "../controllers/post.controller.js";
-import auth from "../middlewares/middlewares.js";
+import { verifyTokenAndUserAuthorization, verifyTokenAndAdminAuthorization } from "../middlewares/verifyToken.js";
+
 
 const postRoutes = express.Router();
 
 postRoutes.get('', getAllPost);
-postRoutes.get('/:id', getPostById);
-postRoutes.post('', createPost);
-postRoutes.put('/:id', auth,updatePost);
-postRoutes.delete('/:id', auth,deletePost);
+postRoutes.get('/:id', verifyTokenAndUserAuthorization,getPostById);
+postRoutes.post('', verifyTokenAndUserAuthorization,createPost);
+postRoutes.put('/:id', verifyTokenAndUserAuthorization ,updatePost);
+postRoutes.delete('/:id', verifyTokenAndUserAuthorization,deletePost);
 postRoutes.get('/search/:key', searchPost);
 
 export { postRoutes };
