@@ -31,7 +31,7 @@ export const createPost = async (req, res) => {
         description : req.body.description,
         content : req.body.description,
         image : req.body.description,
-        author : req.body.author,
+        author : req.user.id,
         category : req.body.category,
         tags : req.body.tags,
     });
@@ -179,5 +179,18 @@ export const unlikePost = async (req, res) => {
         res.status(200).json({message: "Post unliked successfully"});
     } catch (error) {
         res.status(500).json(err)
+    }
+}
+
+//get all post by author
+export const getAllPostByAuthor = async (req, res) => {
+    try {
+        const post = await Post.findOne({
+            author: req.params.id,
+        })
+        
+        res.send(post);
+    } catch (error) {
+        return res.status(404).json(error)
     }
 }

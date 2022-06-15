@@ -1,5 +1,6 @@
 import mongoose from 'mongoose';
 import User from '../models/user.model.js';
+import Post from '../models/post.model.js';
 
 
 export const getAllUser = async (req, res) => {
@@ -99,13 +100,13 @@ export const follow = async (req, res) => {
     try {
         const user = await User.findById(req.params.id);
 
-        const currentUser = await User.findById(req.body.currentUserId);
+        const currentUser = await User.findById(req.user.id);
         
         
-        if (!user.followers.includes(req.body.currentUserId)) {
+        if (!user.followers.includes(req.user.id)) {
             await user.updateOne({
                 $push: {
-                    followers: req.body.currentUserId
+                    followers: req.user.id
                 }
             })
             await currentUser.updateOne({
@@ -131,12 +132,12 @@ export const follow = async (req, res) => {
 export const unfollow = async (req, res) => {
     try {
         const user = await User.findById(req.params.id);
-        const currentUser = await User.findById(req.body.currentUserId);
+        const currentUser = await User.findById(req.user.id);
 
-        if (user.followers.includes(req.body.currentUserId)) {
+        if (user.followers.includes(req.user.id)) {
             await user.updateOne({
                 $pull: {
-                    followers: req.body.currentUserId
+                    followers: req.user.id
                 }
             });
             await currentUser.updateOne({

@@ -11,10 +11,14 @@ import { postRoutes } from "./routes/post.route.js";
 import { tagRoutes } from "./routes/tag.route.js";
 import { categoryRoutes } from "./routes/category.route.js"
 import { commentRoutes } from "./routes/comment.route.js"
+import { notifyRoutes } from './routes/notify.route.js';
 //import { authJwt } from "./utils/jwt.js";
 //import { errorHandler } from "./utils/error-handler.js"
 import fileUpload from 'express-fileupload';
 import { uploadRoutes } from './routes/upload.js';
+import { SocketServer } from "./socketServer.js";
+import http from "http";
+import {Server} from "socket.io";
 
 app.use(cors());
 app.options("*", cors());
@@ -32,6 +36,15 @@ app.use(express.urlencoded({
 //app.use(authJwt());
 //app.use(errorHandler);
 
+//#region //!socket
+const server = http.createServer(app);
+const io = new Server(server);
+
+
+io.on('connection', socket => {
+    SocketServer(socket);
+})
+
 //Routes
 const api = process.env.API_URL;
 
@@ -40,6 +53,7 @@ app.use(`${api}/post`, postRoutes);
 app.use(`${api}/tag`, tagRoutes);
 app.use(`${api}/category`, categoryRoutes);
 app.use(`${api}/comment`, commentRoutes);
+app.use(`${api}/notify`, notifyRoutes);
 app.use(`${api}/upload`, uploadRoutes);
 
 //DB connect

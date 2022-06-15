@@ -3,7 +3,7 @@ import {
     getAllCategory, getCategoryById, createCategory, updateCategory, deleteCategory
 } from "../controllers/category.controller.js";
 
-import { verifyTokenAndUserAuthorization, verifyTokenAndAdminAuthorization } from "../middlewares/verifyToken.js";
+import { verifyTokenAndAdminAuthorization } from "../middlewares/verifyToken.js";
 
 const categoryRoutes = express.Router();
 

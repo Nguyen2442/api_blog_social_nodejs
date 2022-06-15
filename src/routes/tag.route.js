@@ -3,7 +3,7 @@ import {
     getAllTag, getTagById, createTag, updateTag, deleteTag
 } from "../controllers/tag.controller.js";
 
-import { verifyTokenAndUserAuthorization, verifyTokenAndAdminAuthorization } from "../middlewares/verifyToken.js";
+import { verifyTokenAndAdminAuthorization } from "../middlewares/verifyToken.js";
 
 
 const tagRoutes = express.Router();

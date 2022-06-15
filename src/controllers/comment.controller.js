@@ -28,7 +28,7 @@ export const getCommentById = async (req, res) => {
 // Create comment  
 export const createComment = async (req, res) => {
     try {
-        const { postId, content, reply, author} = req.body;
+        const { postId, content, reply} = req.body;
     
 
         const post = await Post.findById(postId);
@@ -44,7 +44,7 @@ export const createComment = async (req, res) => {
         const newComment = new Comment({
             content,
             reply,
-            author,
+            author: req.user.id,
             postId
         });
 

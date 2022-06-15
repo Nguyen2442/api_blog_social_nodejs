@@ -54,7 +54,7 @@ export const login = async (req, res) => {
 
             refreshTokens.push(refreshToken);
             
-            res.status(200).send({ user: user.email, accessToken: accessToken, refreshToken: refreshToken })
+            res.status(200).send({ user: user.email, access_token: accessToken, refresh_token: refreshToken })
         } else {
             return res.status(400).send('Password is wrong!')
         }
@@ -98,7 +98,7 @@ export const refreshToken = async (req, res) => {
         const refreshToken = createRefreshToken({ id: user._id, isAdmin: user.isAdmin });
 
         refreshTokens.push(refreshToken);
-        res.status(200).json({accessToken: accessToken, refreshToken: refreshToken})
+        res.status(200).json({access_token: accessToken, refresh_token: refreshToken})
     } catch (error) {
         return res.status(403).json({
             errors: [
@@ -151,10 +151,10 @@ export const changePassword = async (req, res) => {
 
 }
 
-const createAccessToken = (user) => {
-    return jwt.sign(user , process.env.secret, { expiresIn: "1d" });
+const createAccessToken = (payload) => {
+    return jwt.sign(payload , process.env.secret, { expiresIn: "1d" });
 }
 
-const createRefreshToken = (user) => {
-    return jwt.sign(user , process.env.secret, { expiresIn: "7d" });
+const createRefreshToken = (payload) => {
+    return jwt.sign(payload , process.env.secret, { expiresIn: "7d" });
 }
