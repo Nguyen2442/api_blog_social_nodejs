@@ -22,7 +22,7 @@ export const createNotify = async (req, res) => {
         return res.status(201).json(notify);
 
     } catch (error) {
-        return res.status(500).json(error);
+        return res.status(400).json(error);
     }
 }
 
@@ -34,7 +34,7 @@ export const removeNotify = async (req, res) => {
         });
         return res.json({notify});
     } catch (error) {
-        return res.status(500).json(error);
+        return res.status(400).json(error);
     }
 }
 
@@ -46,7 +46,7 @@ export const getNotifies = async (req, res) => {
 
         return res.json({notifies});
     } catch (error) {
-        return res.status(500).json(error);
+        return res.status(400).json(error);
     }
 }
 
@@ -59,7 +59,7 @@ export const isReadNotify = async (req, res) => {
         });
         return res.json({notifies});
     } catch (error) {
-        return res.status(500).json(error);
+        return res.status(400).json(error);
     }
 }
 
@@ -70,6 +70,6 @@ export const deleteAllNotifies = async (req, res) => {
         });
         return res.json({notifies});
     } catch (error) {
-        return res.status(500).json(error);
+        return res.status(400).json(error);
     }
 }

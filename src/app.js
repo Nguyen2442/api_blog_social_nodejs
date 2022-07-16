@@ -12,6 +12,7 @@ import { tagRoutes } from "./routes/tag.route.js";
 import { categoryRoutes } from "./routes/category.route.js"
 import { commentRoutes } from "./routes/comment.route.js"
 import { notifyRoutes } from './routes/notify.route.js';
+import { healthCheckRoutes } from './routes/healthCheck.route.js';
 //import { authJwt } from "./utils/jwt.js";
 //import { errorHandler } from "./utils/error-handler.js"
 import fileUpload from 'express-fileupload';
@@ -55,6 +56,7 @@ app.use(`${api}/category`, categoryRoutes);
 app.use(`${api}/comment`, commentRoutes);
 app.use(`${api}/notify`, notifyRoutes);
 app.use(`${api}/upload`, uploadRoutes);
+app.use(`${api}/heathCheck`, heathCheckRoutes);
 
 //DB connect
 connect();

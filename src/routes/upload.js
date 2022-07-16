@@ -28,7 +28,7 @@ uploadRoutes.post('',(req, res) =>{
             }
         })
     } catch (err) {
-        return res.status(500).json({msg: err.message})
+        return res.status(400).json({msg: err.message})
     }
 })
 
@@ -44,7 +44,7 @@ uploadRoutes.post('/destroy', (req, res) =>{
         })
 
     } catch (err) {
-        return res.status(500).json({msg: err.message})
+        return res.status(400).json({msg: err.message})
     }
 })
 

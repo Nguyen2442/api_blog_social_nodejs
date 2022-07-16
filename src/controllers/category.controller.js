@@ -4,9 +4,9 @@ import mongoose from 'mongoose';
 export const getAllCategory = async (req, res) => {
     try {
         const category = await Category.find()
-        res.send(category)
+        res.status(200).send(category)
     } catch (error) {
-        res.status(404).json(error)
+        res.status(400).json(error)
     }
 }
 
@@ -28,9 +28,12 @@ export const createCategory = async (req, res) => {
     });
     try {
         const result = await newCategory.save()
-        res.status(201).json(result);
+        res.status(201).json({
+            success: true,
+            message: 'Created Category unsuccessful!'
+        });
     } catch (error) {
-        res.status(400).send('Create category unsuccessful!')
+        res.status(400).send('Created Category unsuccessful!')
     }
 }
 
@@ -45,10 +48,10 @@ export const updateCategory = async (req, res) => {
         
         res.status(200).json({
             success: true,
-            message: 'The category is updated!'
+            message: 'Updated Category successfully!'
         });
     } catch (error) {
-        res.status(500).json({
+        res.status(400).json({
             success: false,
             error: error
         })
@@ -66,7 +69,7 @@ export const deleteCategory = async (req, res) => {
             message : 'The category is deleted!'
         })
     } catch (error) {
-        res.status(500).json({
+        res.status(400).json({
             success: false,
             error:error
         })

@@ -6,7 +6,7 @@ export const getAllTag = async (req, res) => {
         const tag = await Tag.find()
         res.send(tag)
     } catch (error) {
-        res.status(404).json(error)
+        res.status(400).json(error)
     }
 }
 
@@ -46,7 +46,7 @@ export const updateTag = async (req, res) => {
             message: 'The tag is updated!'
         });
     } catch (error) {
-        res.status(500).json({
+        res.status(400).json({
             success: false,
             error: error
         })
@@ -61,6 +61,6 @@ export const deleteTag = async (req, res) => {
         await Tag.findByIdAndRemove(req.params.id);
         res.status(200).json({ success: true, message: 'The tag is deleted' })
     } catch (error) {
-        res.status(500).json({ success: false, error: error })
+        res.status(400).json({ success: false, error: error })
     }
 }

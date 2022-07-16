@@ -8,7 +8,7 @@ export const getAllUser = async (req, res) => {
         const user = await User.find().select('-password')
         res.status(200).send(user)
     } catch (error) {
-        res.status(404).json(error)
+        res.status(400).json(error)
     }
 }
 
@@ -18,9 +18,15 @@ export const getUserById = async (req, res) => {
     }
     try {
         const user = await User.findById(req.params.id).select('-password')
+        if (!user) {
+            res.status(404).json({
+                success: false,
+                message: 'User not found'
+            })
+        }
         res.status(200).send(user)
     } catch (error) {
-        res.status(404).json(error)
+        res.status(400).json(error)
     }
 }
 
@@ -42,9 +48,12 @@ export const createUser = async (req, res) => {
     });
     try {
         const result = await newUser.save();
-        res.status(201).json(result);
+        res.status(201).json({
+            success: true,
+            message: 'Created User successfully!'
+        })
     } catch (error) {
-        res.status(500).json(error);
+        res.status(400).json(error);
     }
 }
 
@@ -75,7 +84,7 @@ export const updateUser = async (req, res) => {
             message: 'The user is updated!'
         })
     } catch (error) {
-        res.status(500).json({
+        res.status(400).json({
             success: false,
             error: error
         })
@@ -91,7 +100,7 @@ export const deleteUser = async (req, res) => {
         await User.findByIdAndRemove(req.params.id);
         res.status(200).json({ success: true, message: 'The user is deleted' })
     } catch (error) {
-        res.status(500).json({ success: false, error: error })
+        res.status(400).json({ success: false, error: error })
     }
 
 }
@@ -125,7 +134,7 @@ export const follow = async (req, res) => {
             })
         }
     } catch (error) {
-        res.status(500).json(error)
+        res.status(400).json(error)
     }
 };
 
@@ -156,7 +165,7 @@ export const unfollow = async (req, res) => {
             })
         }
     } catch (error) {
-        res.status(500).json(error);
+        res.status(400).json(error);
     }
 }
 
@@ -178,6 +187,6 @@ export const getFriends = async (req, res) => {
         })
         res.status(200).json(friendList);
     } catch (error) {
-        res.status(500).json(error)
+        res.status(400).json(error)
     }
 }

@@ -21,7 +21,7 @@ export const getCommentById = async (req, res) => {
         const comment = await Comment.findById(req.params.id);
         res.status(200).send(comment);
     } catch (error) {
-        res.status(404).json(error);
+        res.status(400).json(error);
     }
 }
 
@@ -60,7 +60,7 @@ export const createComment = async (req, res) => {
         await newComment.save();
         res.status(201).json(newComment);
     } catch (err) {
-        return res.status(500).json({ msg: err.message });
+        return res.status(400).json({ msg: err.message });
     }
 }
 
@@ -79,7 +79,7 @@ export const updateComment = async (req, res) => {
 
         res.status(200).json({ msg: "updated successfully." });
     } catch (err) {
-        return res.status(500).json({ msg: err.message });
+        return res.status(400).json({ msg: err.message });
     }
 }
 
@@ -107,7 +107,7 @@ export const likeComment = async (req, res) => {
 
         res.json({ msg: "Comment liked successfully." });
     } catch (err) {
-        return res.status(500).json({ msg: err.message });
+        return res.status(400).json({ msg: err.message });
     }
 }
 
@@ -132,9 +132,9 @@ export const unlikeComment = async (req, res) => {
             { new: true }
         );
 
-        res.json({ msg: "Comment unliked successfully." });
+        res.json({ msg: "Comment unlike successfully." });
     } catch (err) {
-        return res.status(500).json({ msg: err.message });
+        return res.status(400).json({ msg: err.message });
     }
 }
 
@@ -151,6 +151,6 @@ export const deleteComment = async (req, res) => {
         res.json({ message: "Comment deleted successfully." });
 
     } catch (error) {
-        return res.status(500).json({ message: error.message });
+        return res.status(400).json({ message: error.message });
     }
 }

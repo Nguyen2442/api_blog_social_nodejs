@@ -142,7 +142,7 @@ export const changePassword = async (req, res) => {
             message: "Change password successfully"
         });
     } catch (error) {
-        res.status(500).send({
+        res.status(400).send({
             success: false,
             message: error
         });

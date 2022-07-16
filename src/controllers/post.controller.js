@@ -9,7 +9,7 @@ export const getAllPost = async (req, res) => {
         const post = await Post.find()
         res.send(post);
     } catch (error) {
-        return res.status(404).json(error)
+        return res.status(400).json(error)
     }
 }
 
@@ -21,7 +21,7 @@ export const getPostById = async (req, res) => {
         const post = await Post.findById(req.params.id)
         res.send(post)
     } catch (error) {
-        return res.status(404).json(error)
+        return res.status(400).json(error)
     }
 }
 
@@ -39,7 +39,7 @@ export const createPost = async (req, res) => {
         const result = await newPost.save()
         res.status(201).json(result);
     } catch (error) {
-        res.status(500).json(error);
+        res.status(400).json(error);
         console.log(error);
     }
 }
@@ -84,7 +84,7 @@ export const updatePost = async (req, res) => {
             message: 'The post is updated!'
         });
     } catch (error) {
-        res.status(500).json({
+        res.status(400).json({
             success: false,
             error: error
         })
@@ -100,7 +100,7 @@ export const deletePost = async (req, res) => {
         await Post.findByIdAndRemove(req.params.id);
         res.status(200).json({ success: true, message: 'The post is deleted'})
     } catch (error) {
-        res.status(500).json({ success: false, error: error})
+        res.status(400).json({ success: false, error: error})
     }
 }
 
@@ -117,7 +117,7 @@ export const searchPost = async (req, res) => {
         )
         res.send(searchData)
     } catch (error) {
-        res.status(500).json({ success: false, error: error})
+        res.status(400).json({ success: false, error: error})
     }
 }
 
@@ -148,7 +148,7 @@ export const likePost = async (req, res) => {
         }
         res.status(200).json({message: "Post liked successfully"});
     } catch (error) {
-        res.status(500).json(err)
+        res.status(400).json(err)
     }
 }
 
@@ -176,9 +176,9 @@ export const unlikePost = async (req, res) => {
                 message: "Post not found"
             });
         }
-        res.status(200).json({message: "Post unliked successfully"});
+        res.status(200).json({message: "Post unlike successfully"});
     } catch (error) {
-        res.status(500).json(err)
+        res.status(400).json(err)
     }
 }
 
@@ -191,6 +191,6 @@ export const getAllPostByAuthor = async (req, res) => {
         
         res.send(post);
     } catch (error) {
-        return res.status(404).json(error)
+        return res.status(400).json(error)
     }
 }
